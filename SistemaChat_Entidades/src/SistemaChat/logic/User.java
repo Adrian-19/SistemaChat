@@ -5,6 +5,7 @@
  */
 package SistemaChat.logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author adria
  */
-public class User {
+public class User implements Serializable{
     private String username;
     private String password;
     private List<User> userList;

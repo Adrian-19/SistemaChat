@@ -5,6 +5,8 @@
  */
 package SistemaChat.presentation.login;
 
+import SistemaChat.logic.User;
+
 /**
  *
  * @author adria
@@ -36,6 +38,7 @@ public class View extends javax.swing.JFrame {
         ingresoButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         passwordField = new javax.swing.JPasswordField();
+        redMessageLabel = new javax.swing.JLabel();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -62,10 +65,18 @@ public class View extends javax.swing.JFrame {
 
         ingresoButton.setBackground(new java.awt.Color(153, 204, 255));
         ingresoButton.setText("Ingresar");
+        ingresoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ingresoButtonMousePressed(evt);
+            }
+        });
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SistemaChat/presentation/login/text-from-computer-512.png"))); // NOI18N
 
         passwordField.setBackground(new java.awt.Color(204, 255, 255));
+
+        redMessageLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        redMessageLabel.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,7 +99,10 @@ public class View extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel3)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(redMessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
@@ -100,7 +114,9 @@ public class View extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(redMessageLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -127,6 +143,18 @@ public class View extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ingresoButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresoButtonMousePressed
+        redMessageLabel.setText("");
+        try{
+            //controller.login(usernameField.getText(), passwordField.getText());
+        }
+        catch(Exception e)
+        {
+            redMessageLabel.setText("Usuario no existe");
+        }
+        
+    }//GEN-LAST:event_ingresoButtonMousePressed
 
     /**
      * @param args the command line arguments
@@ -172,6 +200,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JPasswordField passwordField;
+    private javax.swing.JLabel redMessageLabel;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
