@@ -71,6 +71,7 @@ public class View extends javax.swing.JFrame {
         enviarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
         enviarButton.setText("Enviar");
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 153));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
