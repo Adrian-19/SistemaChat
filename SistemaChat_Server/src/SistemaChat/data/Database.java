@@ -69,7 +69,7 @@ public class Database {
         try {
             return statement.executeQuery();
         } catch (SQLException ex) {
-        }
+        } 
         return null;
     }    
 }

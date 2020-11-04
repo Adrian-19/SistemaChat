@@ -5,6 +5,7 @@
  */
 package SistemaChat.presentation.login;
 
+import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
 
 /**
@@ -16,10 +17,13 @@ public class Controller {
     private Model model;
     private ServiceProxy proxy;
 
-    public Controller(View view, Model model, ServiceProxy proxy) {
+    public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
-        this.proxy = proxy;
+        this.proxy = (ServiceProxy) ServiceProxy.getInstance(); 
+        this.proxy.setController(this); 
+        view.setController(this); 
+        view.setModel(model); 
     }
     
     public Controller()
@@ -52,6 +56,18 @@ public class Controller {
     public void setProxy(ServiceProxy proxy) {
         this.proxy = proxy;
     }
+
+    void login(String userName, String pass) throws Exception{
+        User aux = new User(); 
+        aux.setUsername(userName);
+        aux.setPassword(pass);
+        User logged= proxy.getInstance().login(aux); 
+        model.setCurrentUser(logged);
+        model.commit(); 
+    }
     
+
+    
+
     
 }
