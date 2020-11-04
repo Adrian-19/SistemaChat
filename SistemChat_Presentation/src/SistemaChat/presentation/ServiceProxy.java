@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -80,10 +81,46 @@ public class ServiceProxy implements IService{
         stop();
         disconnect();
     }
-
+    
+    // LISTENING 
+    boolean continuar = true;
+    
+    
+    public void stop()
+    {
+        continuar = false;
+    }
+    
+    public void listen()
+    {
+        int method;
+        while (continuar) {
+            try {
+                method = in.readInt();
+                switch(method){
+                case Protocol.DELIVER:
+                    try {
+                        Message message=(Message)in.readObject();
+                        send(message);
+                    } 
+                    catch (ClassNotFoundException ex) {}
+                    break;
+                }
+                out.flush();
+            } catch (IOException  ex) {
+                continuar = false;
+            }                        
+        }
+    }
+    
     @Override
     public void send(Message msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+               //controller.deliver(message); // crear metodo deliver
+            }
+         }
+      );
     }
     
 }

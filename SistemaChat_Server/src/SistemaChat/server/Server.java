@@ -5,6 +5,7 @@
  */
 package SistemaChat.server;
 
+import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.protocol.Protocol;
 import java.io.IOException;
@@ -34,8 +35,8 @@ public class Server {
     }
     
     public void run(){ // llamado cuando el server se inicializa
-        //Service localService = (Service)(Service.instance()); //  implementar Service
-        //localService.setSever(this);
+        Service localService = (Service)(Service.getInstance());
+        localService.setServer(this);
         boolean continuar = true;
         while (continuar) {
             try {
@@ -47,7 +48,7 @@ public class Server {
                     int method = in.readInt(); // should be Protocol.LOGIN                    
                     User user=(User)in.readObject();                          
                     try {
-                        //user=Service.instance().login(user);   //  implementar Service
+                        user=Service.getInstance().login(user);
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         out.writeObject(user);
                         out.flush();
@@ -67,7 +68,7 @@ public class Server {
         }
     }
     
-    public void deliver(String message){
+    public void deliver(Message message){
         for(Worker wk:workers){
           wk.deliver(message);
         }        

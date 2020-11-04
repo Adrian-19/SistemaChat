@@ -5,6 +5,7 @@
  */
 package SistemaChat.server;
 
+import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.protocol.Protocol;
 import java.io.IOException;
@@ -58,15 +59,16 @@ public class Worker {
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
                     try {
-                        //Service.instance().logout(user);
+                        Service.getInstance().logout(user);
                     } catch (Exception ex) {}
                     stop();
                     break;                 
                 case Protocol.SEND:
-                    String message=null;
+                    Message message=null;
                     try {
-                        message = (String)in.readObject();
-                        //Service.instance().post(user.getId()+": "+message);
+                        message = (Message)in.readObject();
+                        message.setText(user.getUsername() + ": " + message.getText());
+                        Service.getInstance().send(message);
                     } catch (ClassNotFoundException ex) {}
                     break;                     
                 }
@@ -77,7 +79,7 @@ public class Worker {
         }
     }
     
-    public void deliver(String message){
+    public void deliver(Message message){
         try {
             out.writeInt(Protocol.DELIVER);
             out.writeObject(message);

@@ -16,12 +16,14 @@ import java.util.List;
 public class User implements Serializable{
     private String username;
     private String password;
+    private String estado;
     private List<User> userList;
     private List<Chat> chatList;
 
-    public User(String username, String password, List<User> userList, List<Chat> chatList) {
+    public User(String username, String password, String estado, List<User> userList, List<Chat> chatList) {
         this.username = username;
         this.password = password;
+        this.estado = estado;
         this.userList = userList;
         this.chatList = chatList;
     }
@@ -29,6 +31,7 @@ public class User implements Serializable{
     public User() {
         this.username = "";
         this.password = "";
+        this.estado = "";
         this.userList = new ArrayList<>();
         this.chatList = new ArrayList<>();
     }
@@ -49,6 +52,16 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
+    
     public List<User> getUserList() {
         return userList;
     }
