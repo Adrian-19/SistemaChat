@@ -6,18 +6,21 @@
 package SistemaChat.presentation.login;
 
 import SistemaChat.logic.User;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author adria
  */
-public class View extends javax.swing.JFrame {
+public class View extends javax.swing.JFrame implements java.util.Observer {
 
     /**
      * Creates new form View
      */
     public View() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -147,10 +150,11 @@ public class View extends javax.swing.JFrame {
     private void ingresoButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresoButtonMousePressed
         redMessageLabel.setText("");
         try{
-            //controller.login(usernameField.getText(), passwordField.getText());
+            controller.login(usernameField.getText(), passwordField.getText());
         }
         catch(Exception e)
         {
+            
             redMessageLabel.setText("Usuario no existe");
         }
         
@@ -203,4 +207,27 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel redMessageLabel;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
+
+    Controller controller; 
+    Model model; 
+
+    void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    void setModel(Model model) {
+        this.model=model;
+        model.addObserver(this);
+    }
+
+    @Override
+    public void update(Observable o, Object o1) {
+        //implementar
+    }
+    
+    
+    
+    
+    
+    
 }

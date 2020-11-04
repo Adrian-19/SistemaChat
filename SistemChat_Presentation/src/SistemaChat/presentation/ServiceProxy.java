@@ -122,5 +122,9 @@ public class ServiceProxy implements IService{
          }
       );
     }
+
+    public void setController(Controller controller) {
+        this.controller = controller; 
+    }
     
 }
