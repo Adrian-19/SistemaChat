@@ -43,6 +43,7 @@ public class Service implements IService {
     
     public User login(User u) throws Exception{
         User result = usuarioDao.read(u.getUsername());
+        System.out.println(result.getUsername());
         if(result==null)
         {
             throw new Exception("User does not exist");

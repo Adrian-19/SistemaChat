@@ -18,23 +18,26 @@ import java.util.Properties;
 
 
 public class Database {
-    private static Database theInstance;
-    public static Database instance(){
-        if (theInstance==null){ 
-            theInstance=new Database();
+    private static Database instance;
+    public static Database getInstance(){
+        if (instance==null){ 
+            instance=new Database();
         }
-        return theInstance;
+        return instance;
     }
-    public static final String PROPERTIES_FILE_NAME="/db.properties";        
+    
     Connection cnx;
+    
+    public static final String PROPERTIES_FILE="/db.properties";  
+    
     public Database(){
         cnx=this.getConnection();            
     }
     public Connection getConnection(){
         try {
             Properties prop = new Properties();
-            URL resourceUrl = getClass().getResource(PROPERTIES_FILE_NAME);
-            File file = new File(resourceUrl.toURI());            
+            URL resourceUrl = getClass().getResource(PROPERTIES_FILE);
+            File file = new File(resourceUrl.toURI());      //      
             prop.load(new BufferedInputStream(new FileInputStream(file)));
             String driver = prop.getProperty("database_driver");
             String server = prop.getProperty("database_server");

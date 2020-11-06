@@ -17,10 +17,11 @@ import java.sql.SQLException;
 public class UsuarioDao {
     public User read(String name) throws Exception
     {
+        Database.getInstance();
         String sql = "select * from User where username=?";
-        PreparedStatement stm = Database.instance().prepareStatement(name);
-        stm.setString(1, name);
-        ResultSet rs = Database.instance().executeQuery(stm);
+        PreparedStatement stm = Database.getInstance().prepareStatement(sql);
+        stm.setString(1, name); //
+        ResultSet rs = Database.getInstance().executeQuery(stm);
         if(rs.next()){
             return from(rs);
         }

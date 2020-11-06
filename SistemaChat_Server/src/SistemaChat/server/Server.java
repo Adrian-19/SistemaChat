@@ -48,6 +48,7 @@ public class Server {
                     int method = in.readInt(); // should be Protocol.LOGIN                    
                     User user=(User)in.readObject();                          
                     try {
+                        System.out.println("ingrese a try");
                         user=Service.getInstance().login(user);
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         out.writeObject(user);
@@ -64,7 +65,6 @@ public class Server {
 
             } 
             catch (IOException ex) {}
-            System.out.println("ciclo terminado");
         }
     }
     

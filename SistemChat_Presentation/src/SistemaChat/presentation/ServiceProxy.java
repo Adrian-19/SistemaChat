@@ -8,6 +8,7 @@ package SistemaChat.presentation;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.login.Controller;
+import SistemaChat.presentation.chat.ControllerChat;
 import SistemaChat.protocol.IService;
 import SistemaChat.protocol.Protocol;
 import java.io.IOException;
@@ -26,7 +27,8 @@ public class ServiceProxy implements IService{
     Socket socket;
     ObjectInputStream in;
     ObjectOutputStream out;
-    Controller controller;
+    Controller controllerLogin;
+    ControllerChat controllerChat;
     
     public static IService getInstance(){
         if (instance == null){
@@ -53,7 +55,7 @@ public class ServiceProxy implements IService{
     
     
     public User login(User u) throws Exception {
-        connect(); // se conecta al servidor. DEBE DE ESTAR CORRIENDO
+        connect(); // se conecta al servidor. deberia estar corriendo
         try{
             out.writeInt(Protocol.LOGIN);
             out.writeObject(u);
@@ -123,8 +125,13 @@ public class ServiceProxy implements IService{
       );
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller; 
+    public void setControllerLogin(Controller controller) {
+        this.controllerLogin = controller; 
+    }
+    
+    public void setControllerChat(ControllerChat c)
+    {
+        controllerChat = c;
     }
     
 }
