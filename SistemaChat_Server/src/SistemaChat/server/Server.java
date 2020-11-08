@@ -48,13 +48,13 @@ public class Server {
                     int method = in.readInt(); // should be Protocol.LOGIN                    
                     User user=(User)in.readObject();                          
                     try {
-                        System.out.println("ingrese a try");
                         user=Service.getInstance().login(user);
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         out.writeObject(user);
                         out.flush();
                         Worker worker = new Worker(socket,in,out,user); 
-                        workers.add(worker);                      
+                        workers.add(worker);
+                        System.out.println("worker agregado");
                         worker.start();                            
                     } catch (Exception ex) {
                        out.writeInt(Protocol.ERROR_LOGIN);
@@ -68,6 +68,7 @@ public class Server {
         }
     }
     
+    // METODO PARA TOMAR EN CONSIDERACION EN EL ENVIO DE MENSAJES
     public void deliver(Message message){
         for(Worker wk:workers){
           wk.deliver(message);

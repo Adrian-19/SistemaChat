@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 /**
  *
@@ -70,7 +71,17 @@ public class Worker {
                         message.setText(user.getUsername() + ": " + message.getText());
                         Service.getInstance().send(message);
                     } catch (ClassNotFoundException ex) {}
-                    break;                     
+                    break;
+                case Protocol.SEARCH:
+                    try{
+                        List<User> lista = Service.getInstance().getContactos((List<User>) in.readObject());
+                        // Debido a que no tira excepcion, se escribira el protocol de NO ERROR
+                        out.writeInt(Protocol.ERROR_NO_ERROR);
+                        // Se mandara en el outputstream la nueva lista creada
+                        out.writeObject(lista);
+                    }
+                    catch(Exception e){}
+                    break;
                 }
                 out.flush();
             } catch (IOException  ex) {

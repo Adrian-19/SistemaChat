@@ -5,6 +5,7 @@
  */
 package SistemaChat.presentation.chat;
 
+import SistemaChat.presentation.UsuarioTableModel;
 import java.awt.Color;
 import java.util.Observable;
 
@@ -41,7 +42,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         enviarField = new javax.swing.JTextField();
         enviarButton = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        listaContactos = new javax.swing.JTable();
         buscarButton = new javax.swing.JButton();
         buscarField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -57,6 +58,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 255));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         colorPanel.setBackground(new java.awt.Color(255, 204, 153));
         colorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -82,8 +88,8 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         enviarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
         enviarButton.setText("Enviar");
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 153));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        listaContactos.setBackground(new java.awt.Color(255, 255, 153));
+        listaContactos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -94,7 +100,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
                 "Username", "Status"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(listaContactos);
 
         buscarButton.setBackground(new java.awt.Color(255, 255, 250));
         buscarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
@@ -210,8 +216,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
                             .addComponent(enviarField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(enviarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mensajeErrorEnvio)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(mensajeErrorEnvio))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -222,7 +227,9 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
@@ -249,6 +256,10 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private void buscarFieldMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarFieldMousePressed
         buscarField.setText("");
     }//GEN-LAST:event_buscarFieldMousePressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        controller.logout();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -297,9 +308,9 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTable listaContactos;
     private javax.swing.JLabel mensajeErrorEnvio;
     private javax.swing.JLabel mensajeErrorUsuario;
     private javax.swing.JLabel usernameLabel;
@@ -314,6 +325,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
 
     public void setModel(Model model) {
         this.model = model;
+        model.addObserver(this);
     }
 
     public ControllerChat getController() {
@@ -325,8 +337,13 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(Observable updatedModel, Object parametros) {
+        listaContactos.setModel(new UsuarioTableModel(model.getContactsList()));
+        // como estaremos recibiendo una lista actualizada cada cierto tiempo,
+        // podria ser que en esta lista se busque el usuario recipient para
+        // igualmente a este actualizarlo y asi verificar su estado.
+        
+        
     }
     
     

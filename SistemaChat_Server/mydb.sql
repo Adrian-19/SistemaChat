@@ -20,7 +20,7 @@ USE `mydb` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`User` (
   `username` VARCHAR(15) NOT NULL,
   `password` VARCHAR(15) NOT NULL,
-  `estado` VARCHAR(6) NOT NULL,
+  `estado` VARCHAR(7) NOT NULL,
   PRIMARY KEY (`username`))
 ENGINE = InnoDB;
 

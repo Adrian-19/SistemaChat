@@ -5,6 +5,7 @@
  */
 package SistemaChat.presentation.chat;
 
+import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
 
 /**
@@ -24,6 +25,31 @@ public class ControllerChat {
         model = m;
         proxy = (ServiceProxy) ServiceProxy.getInstance();
         proxy.setControllerChat(this);
+        view.setController(this);
+        view.setModel(model);
+    }
+    
+    // Hace una actualizacion de los datos que se presentaran en la pantalla.
+    // Recibe como parametro el usuario que fue loggeado para tenerlo en 
+    // consideracion en este nuevo M.V.C
+    public void preSet(User c)
+    {
+        model.setCurrent(c);
+        model.setRecipient(new User());
+        User nuevo = new User();
+        // BORRAR LUEGO DE IMPLEMENTAR LA FUNCION DE AGREGAR CONTACTOS
+        nuevo.setUsername("diana");
+        nuevo.setPassword("5678");
+        nuevo.setEstado("online");
+        c.getUserList().add(nuevo);
+        model.setContactsList(ServiceProxy.getInstance().getContactos(c.getUserList()));
+        model.commit();
+    }
+    
+    public void logout()
+    { 
+        this.hide();
+        parent.logout();
     }
     
     public void setParent(SistemaChat.presentation.login.Controller p)
@@ -40,4 +66,5 @@ public class ControllerChat {
     {
         view.setVisible(false);
     }
+
 }

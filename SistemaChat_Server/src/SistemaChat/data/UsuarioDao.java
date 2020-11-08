@@ -9,6 +9,8 @@ import SistemaChat.logic.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,6 +29,18 @@ public class UsuarioDao {
         }
         else{
             throw new Exception ("Usuario no existe");
+        }
+    }
+    
+    public void update(User o) throws Exception{
+        String sql="update User set estado=? "+
+                "where username=?";
+        PreparedStatement stm = Database.getInstance().prepareStatement(sql);
+        stm.setString(1, o.getEstado());
+        stm.setString(2, o.getUsername());        
+        int count=Database.getInstance().executeUpdate(stm);
+        if (count==0){
+            throw new Exception("User no existe");
         }
     }
     

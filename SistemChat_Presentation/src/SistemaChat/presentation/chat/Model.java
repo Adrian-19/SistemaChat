@@ -6,6 +6,8 @@
 package SistemaChat.presentation.chat;
 
 import SistemaChat.logic.User;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,8 +15,13 @@ import SistemaChat.logic.User;
  */
 public class Model extends java.util.Observable{
     User current;
+    User recipient;
+    List<User> contactsList;
+    
     public Model(){
         current = new User();
+        recipient = new User();
+        contactsList = new ArrayList<>();
     }
     
     public void setCurrent(User current) {
@@ -24,6 +31,24 @@ public class Model extends java.util.Observable{
     public User getCurrent() {
         return current;
     }
+
+    public User getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
+    }
+
+    public List<User> getContactsList() {
+        return contactsList;
+    }
+
+    public void setContactsList(List<User> contactsList) {
+        this.contactsList = contactsList;
+    }
+    
+    
     
     @Override
     public void addObserver(java.util.Observer o) {
@@ -33,6 +58,6 @@ public class Model extends java.util.Observable{
     
     public void commit(){
         this.setChanged();
-        this.notifyObservers();        
+        this.notifyObservers();
     }   
 }

@@ -89,11 +89,23 @@ public class Controller {
         model.setCurrentUser(logged);
         model.commit(); 
         this.hide();
-        //chat_Controller.preSet();
+        // Envia el usuario loggeado
+        chat_Controller.preSet(logged);
         chat_Controller.show();
     }
     
-
+    public void logout()
+    {
+        // talvez no funcione, verificar
+        try{
+            proxy.logout(model.getCurrentUser());
+        }
+        catch(Exception ex){}
+        this.show();
+        System.out.println("saliendo");
+        model.setCurrentUser(new User());
+        model.commit();       
+    }
     
 
     

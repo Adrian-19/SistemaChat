@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.SwingUtilities;
 
 /**
@@ -74,7 +76,29 @@ public class ServiceProxy implements IService{
             return null;
         }
     }
-
+    
+    public List<User> getContactos(List<User> list)
+    {
+        try{
+            out.writeInt(Protocol.SEARCH);
+            out.writeObject(list);
+            int answer = in.readInt();
+            // Si pudo encontrar los contactos, devuelve el protocol de NO ERROR
+            // y procede a devolver la lista de contactos encontrada
+            if(answer == Protocol.ERROR_NO_ERROR)
+            {
+                List<User> lista = (List<User>) in.readObject();
+                return lista;
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        // Si no encuentra nada, devuelve una lista nueva vacia.
+        return new ArrayList<>();
+    }
+    
     @Override
     public void logout(User u) throws Exception {
         out.writeInt(Protocol.LOGOUT);
@@ -83,6 +107,8 @@ public class ServiceProxy implements IService{
         stop();
         disconnect();
     }
+    
+    
     
     // LISTENING 
     boolean continuar = true;
