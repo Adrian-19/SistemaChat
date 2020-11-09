@@ -66,7 +66,7 @@ public class ServiceProxy implements IService{
             if(respuesta == Protocol.ERROR_NO_ERROR)
             {
                 User user = (User) in.readObject();
-                //this.start(); // este inicializa el nuevo thread que escucha todos los deliver
+                this.start(); // este inicializa el nuevo thread que escucha todos los deliver
                 return user;
             }
             disconnect();
@@ -82,7 +82,9 @@ public class ServiceProxy implements IService{
         try{
             out.writeInt(Protocol.SEARCH);
             out.writeObject(list);
+            System.out.println("object outed");
             int answer = in.readInt();
+            System.out.println(answer);
             // Si pudo encontrar los contactos, devuelve el protocol de NO ERROR
             // y procede a devolver la lista de contactos encontrada
             if(answer == Protocol.ERROR_NO_ERROR)
@@ -93,7 +95,7 @@ public class ServiceProxy implements IService{
         }
         catch(Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()+" este es el msj?");
         }
         // Si no encuentra nada, devuelve una lista nueva vacia.
         return new ArrayList<>();
@@ -113,6 +115,15 @@ public class ServiceProxy implements IService{
     // LISTENING 
     boolean continuar = true;
     
+    public void start(){
+        Thread t = new Thread(new Runnable(){
+            public void run(){
+                listen();
+            }
+        });
+        continuar = true;
+        t.start();
+    }
     
     public void stop()
     {
@@ -124,6 +135,7 @@ public class ServiceProxy implements IService{
         int method;
         while (continuar) {
             try {
+                System.out.println("se esta ejecutando esto?");
                 method = in.readInt();
                 switch(method){
                 case Protocol.DELIVER:
@@ -133,7 +145,9 @@ public class ServiceProxy implements IService{
                     } 
                     catch (ClassNotFoundException ex) {}
                     break;
+                    
                 }
+                
                 out.flush();
             } catch (IOException  ex) {
                 continuar = false;
@@ -145,7 +159,7 @@ public class ServiceProxy implements IService{
     public void send(Message msg) {
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-               //controller.deliver(message); // crear metodo deliver
+               controllerChat.deliver(msg); // crear metodo deliver
             }
          }
       );

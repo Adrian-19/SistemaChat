@@ -35,7 +35,7 @@ public class Worker {
     public void start()
     {
         try {
-            System.out.println("Worker awaiting commands");
+            //System.out.println("Worker awaiting commands");
             Thread thread = new Thread(new Runnable(){
                 public void run(){
                     listen();
@@ -65,6 +65,7 @@ public class Worker {
                     stop();
                     break;                 
                 case Protocol.SEND:
+                    System.out.println("esto no se deberia ejecutar ahorita");
                     Message message=null;
                     try {
                         message = (Message)in.readObject();
@@ -75,10 +76,12 @@ public class Worker {
                 case Protocol.SEARCH:
                     try{
                         List<User> lista = Service.getInstance().getContactos((List<User>) in.readObject());
+                        
                         // Debido a que no tira excepcion, se escribira el protocol de NO ERROR
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         // Se mandara en el outputstream la nueva lista creada
                         out.writeObject(lista);
+                        System.out.println(lista.get(0).getUsername());
                     }
                     catch(Exception e){}
                     break;

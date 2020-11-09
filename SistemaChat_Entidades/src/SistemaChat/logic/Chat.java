@@ -7,12 +7,17 @@ package SistemaChat.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlIDREF;
 
 /**
  *
  * @author adria
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Chat {
+    @XmlIDREF
     private User receiver;
     private List<Message> messageList;
 

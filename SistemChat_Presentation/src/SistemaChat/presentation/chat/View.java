@@ -5,8 +5,10 @@
  */
 package SistemaChat.presentation.chat;
 
+import SistemaChat.logic.Message;
 import SistemaChat.presentation.UsuarioTableModel;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.Observable;
 
 /**
@@ -36,7 +38,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         jTextArea1 = new javax.swing.JTextArea();
         colorPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        chatLog = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         usernameLabel = new javax.swing.JLabel();
         enviarField = new javax.swing.JTextField();
@@ -71,11 +73,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
             }
         });
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setBackground(new java.awt.Color(255, 255, 204));
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        chatLog.setEditable(false);
+        chatLog.setBackground(new java.awt.Color(255, 255, 204));
+        chatLog.setColumns(20);
+        chatLog.setRows(5);
+        jScrollPane2.setViewportView(chatLog);
 
         jLabel1.setFont(new java.awt.Font("Helvetica-Light", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
@@ -84,9 +86,20 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         usernameLabel.setFont(new java.awt.Font("Helvetica-Light", 1, 14)); // NOI18N
         usernameLabel.setText("user");
 
+        enviarField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                enviarFieldKeyPressed(evt);
+            }
+        });
+
         enviarButton.setBackground(new java.awt.Color(255, 255, 250));
         enviarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
         enviarButton.setText("Enviar");
+        enviarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enviarButtonActionPerformed(evt);
+            }
+        });
 
         listaContactos.setBackground(new java.awt.Color(255, 255, 153));
         listaContactos.setModel(new javax.swing.table.DefaultTableModel(
@@ -194,8 +207,9 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
                         .addGap(4, 4, 4)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorPanelLayout.createSequentialGroup()
+                        .addGap(0, 6, Short.MAX_VALUE)
                         .addComponent(usernameLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buscarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(buscarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,9 +241,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+            .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -260,6 +272,19 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         controller.logout();
     }//GEN-LAST:event_formWindowClosing
+
+    private void enviarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarButtonActionPerformed
+        Message message = new Message(model.getCurrent(), enviarField.getText());
+        controller.send(message);
+    }//GEN-LAST:event_enviarButtonActionPerformed
+
+    private void enviarFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarFieldKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            Message message = new Message(model.getCurrent(), enviarField.getText());
+            controller.send(message);
+        }
+    }//GEN-LAST:event_enviarFieldKeyPressed
 
     /**
      * @param args the command line arguments
@@ -300,6 +325,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private javax.swing.JTextField agregarField;
     private javax.swing.JButton buscarButton;
     private javax.swing.JTextField buscarField;
+    private javax.swing.JTextArea chatLog;
     private javax.swing.JPanel colorPanel;
     private javax.swing.JButton enviarButton;
     private javax.swing.JTextField enviarField;
@@ -309,7 +335,6 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTable listaContactos;
     private javax.swing.JLabel mensajeErrorEnvio;
     private javax.swing.JLabel mensajeErrorUsuario;
@@ -339,11 +364,18 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     @Override
     public void update(Observable updatedModel, Object parametros) {
         listaContactos.setModel(new UsuarioTableModel(model.getContactsList()));
+        String msg = "";
+        for(Message m: model.getMessageList())
+        {
+            msg+=(m.getText()+"\n");
+        }
+        chatLog.setText(msg);
+        enviarField.setText("");
+        enviarField.requestFocus();
+        
         // como estaremos recibiendo una lista actualizada cada cierto tiempo,
         // podria ser que en esta lista se busque el usuario recipient para
         // igualmente a este actualizarlo y asi verificar su estado.
-        
-        
     }
     
     

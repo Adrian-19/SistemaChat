@@ -5,6 +5,7 @@
  */
 package SistemaChat.presentation.chat;
 
+import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
 
@@ -45,6 +46,16 @@ public class ControllerChat {
         model.setContactsList(ServiceProxy.getInstance().getContactos(c.getUserList()));
         model.commit();
     }
+    
+    public void send(Message msg)
+    {
+        proxy.send(msg);
+    }
+    
+    public void deliver(Message message){
+        model.getMessageList().add(message);
+        model.commit();    
+    }    
     
     public void logout()
     { 

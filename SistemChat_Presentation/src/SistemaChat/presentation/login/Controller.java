@@ -5,8 +5,11 @@
  */
 package SistemaChat.presentation.login;
 
+import SistemaChat.data.XmlPersister;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -85,7 +88,21 @@ public class Controller {
         User aux = new User(); 
         aux.setUsername(userName);
         aux.setPassword(pass);
-        User logged= proxy.getInstance().login(aux); 
+        User logged= proxy.getInstance().login(aux);
+        
+        //Setea el nombre del archivo xml segun el nombre del usuario
+        XmlPersister.getInstance().setPath(logged.getUsername()+".xml");
+        
+        User recuperado = new User();
+        try{
+            //Recupera el usuario con el archivo xml
+            recuperado = XmlPersister.getInstance().load();
+        }
+        catch(Exception e){
+        }
+        
+        logged.setChatList(recuperado.getChatList());
+        logged.setUserList(recuperado.getUserList());
         model.setCurrentUser(logged);
         model.commit(); 
         this.hide();
@@ -96,7 +113,11 @@ public class Controller {
     
     public void logout()
     {
-        // talvez no funcione, verificar
+        try {
+            XmlPersister.getInstance().store(model.getCurrentUser());
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try{
             proxy.logout(model.getCurrentUser());
         }

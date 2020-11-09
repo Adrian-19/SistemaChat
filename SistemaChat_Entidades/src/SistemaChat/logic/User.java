@@ -8,13 +8,21 @@ package SistemaChat.logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author adria
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User implements Serializable{
+    @XmlID
     private String username;
+    
     private String password;
     private String estado;
     private List<User> userList;

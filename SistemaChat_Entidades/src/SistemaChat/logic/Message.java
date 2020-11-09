@@ -5,11 +5,17 @@
  */
 package SistemaChat.logic;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlIDREF;
+
 /**
  *
  * @author adria
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Message {
+    @XmlIDREF
     private User sender;
     private String text;
 
