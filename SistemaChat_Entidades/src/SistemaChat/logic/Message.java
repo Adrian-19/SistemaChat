@@ -5,6 +5,7 @@
  */
 package SistemaChat.logic;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlIDREF;
@@ -14,7 +15,7 @@ import javax.xml.bind.annotation.XmlIDREF;
  * @author adria
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Message {
+public class Message implements Serializable{
     @XmlIDREF
     private User sender;
     private String text;

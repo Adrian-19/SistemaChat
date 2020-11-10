@@ -56,6 +56,7 @@ public class Worker {
         while (continuar) {
             try {
                 method = in.readInt();
+                System.out.println("method: "+method);
                 switch(method){
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
@@ -65,7 +66,6 @@ public class Worker {
                     stop();
                     break;                 
                 case Protocol.SEND:
-                    System.out.println("esto no se deberia ejecutar ahorita");
                     Message message=null;
                     try {
                         message = (Message)in.readObject();
