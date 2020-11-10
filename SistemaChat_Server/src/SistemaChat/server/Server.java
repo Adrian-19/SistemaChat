@@ -5,6 +5,7 @@
  */
 package SistemaChat.server;
 
+import SistemaChat.data.XmlPersister;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.protocol.Protocol;
@@ -49,9 +50,31 @@ public class Server {
                     User user=(User)in.readObject();                          
                     try {
                         user=Service.getInstance().login(user);
+                        XmlPersister.getInstance().setPath(user.getUsername()+".xml");
+                        User recuperado = new User();
+                        try{
+                            //Recupera el usuario con el archivo xml
+                            recuperado = XmlPersister.getInstance().load();
+                        }
+                        catch(Exception e){
+                        }
+                        
+                        User nuevo = new User();
+                        
+                        // PRUEBA 
+                        nuevo.setUsername("diana");
+                        nuevo.setPassword("5678");
+                        nuevo.setEstado("online");
+                        recuperado.getUserList().add(nuevo);
+                        
+                        List<User> lista = Service.getInstance().getContactos(recuperado.getUserList());
+                        System.out.println(lista.get(0).getUsername());
+                        user.setUserList(lista);
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         out.writeObject(user);
                         out.flush();
+                        
+                        // INICIALIZA LOS WORKER
                         Worker worker = new Worker(socket,in,out,user); 
                         workers.add(worker);
                         System.out.println("worker agregado");

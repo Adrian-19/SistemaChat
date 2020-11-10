@@ -73,18 +73,6 @@ public class Worker {
                         Service.getInstance().send(message);
                     } catch (ClassNotFoundException ex) {}
                     break;
-                case Protocol.SEARCH:
-                    try{
-                        List<User> lista = Service.getInstance().getContactos((List<User>) in.readObject());
-                        
-                        // Debido a que no tira excepcion, se escribira el protocol de NO ERROR
-                        out.writeInt(Protocol.ERROR_NO_ERROR);
-                        // Se mandara en el outputstream la nueva lista creada
-                        out.writeObject(lista);
-                        System.out.println(lista.get(0).getUsername());
-                    }
-                    catch(Exception e){}
-                    break;
                 }
                 out.flush();
             } catch (IOException  ex) {

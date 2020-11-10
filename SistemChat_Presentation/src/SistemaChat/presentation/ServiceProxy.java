@@ -69,36 +69,14 @@ public class ServiceProxy implements IService{
                 this.start(); // este inicializa el nuevo thread que escucha todos los deliver
                 return user;
             }
-            disconnect();
-            throw new Exception("El usuario no existe");
+            else{
+                disconnect();
+                throw new Exception("El usuario no existe");
+            }
         }
         catch(IOException | ClassNotFoundException e){
             return null;
         }
-    }
-    
-    public List<User> getContactos(List<User> list)
-    {
-        try{
-            out.writeInt(Protocol.SEARCH);
-            out.writeObject(list);
-            System.out.println("object outed");
-            int answer = in.readInt();
-            System.out.println(answer);
-            // Si pudo encontrar los contactos, devuelve el protocol de NO ERROR
-            // y procede a devolver la lista de contactos encontrada
-            if(answer == Protocol.ERROR_NO_ERROR)
-            {
-                List<User> lista = (List<User>) in.readObject();
-                return lista;
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage()+" este es el msj?");
-        }
-        // Si no encuentra nada, devuelve una lista nueva vacia.
-        return new ArrayList<>();
     }
     
     @Override
@@ -109,8 +87,6 @@ public class ServiceProxy implements IService{
         stop();
         disconnect();
     }
-    
-    
     
     // LISTENING 
     boolean continuar = true;
@@ -135,17 +111,16 @@ public class ServiceProxy implements IService{
         int method;
         while (continuar) {
             try {
-                System.out.println("se esta ejecutando esto?");
-                method = in.readInt();
+                method = in.readInt(); //
+                System.out.println(method);
                 switch(method){
                 case Protocol.DELIVER:
                     try {
                         Message message=(Message)in.readObject();
-                        send(message);
+                        deliver(message);
                     } 
                     catch (ClassNotFoundException ex) {}
                     break;
-                    
                 }
                 
                 out.flush();
@@ -156,10 +131,20 @@ public class ServiceProxy implements IService{
     }
     
     @Override
-    public void send(Message msg) {
+    public void send(Message msg)
+    {
+        try{
+            System.out.println("se ejecuta?");
+            out.writeInt(Protocol.SEND);
+            out.writeObject(msg);
+            out.flush();
+        }catch(IOException ex){}
+    }
+    
+    private void deliver(Message msg) {
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-               controllerChat.deliver(msg); // crear metodo deliver
+               controllerChat.deliver(msg);
             }
          }
       );
@@ -172,6 +157,11 @@ public class ServiceProxy implements IService{
     public void setControllerChat(ControllerChat c)
     {
         controllerChat = c;
+    }
+
+    @Override
+    public List<User> getContactos(List<User> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

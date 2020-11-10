@@ -18,7 +18,5 @@ public interface IService {
     public void logout(User u) throws Exception;
     public void send(Message msg);
     
-    //Encuentra los contactos de un Usuario en la base de datos para conocer
-    //su estado de conexion en el servidor.
     public List<User> getContactos(List<User> list);
 }

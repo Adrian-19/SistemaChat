@@ -90,19 +90,19 @@ public class Controller {
         aux.setPassword(pass);
         User logged= proxy.getInstance().login(aux);
         
-        //Setea el nombre del archivo xml segun el nombre del usuario
-        XmlPersister.getInstance().setPath(logged.getUsername()+".xml");
-        
-        User recuperado = new User();
-        try{
-            //Recupera el usuario con el archivo xml
-            recuperado = XmlPersister.getInstance().load();
-        }
-        catch(Exception e){
-        }
-        
-        logged.setChatList(recuperado.getChatList());
-        logged.setUserList(recuperado.getUserList());
+//        //Setea el nombre del archivo xml segun el nombre del usuario
+//        XmlPersister.getInstance().setPath(logged.getUsername()+".xml");
+//        
+//        User recuperado = new User();
+//        try{
+//            //Recupera el usuario con el archivo xml
+//            recuperado = XmlPersister.getInstance().load();
+//        }
+//        catch(Exception e){
+//        }
+//        
+//        logged.setChatList(recuperado.getChatList());
+//        logged.setUserList(recuperado.getUserList());
         model.setCurrentUser(logged);
         model.commit(); 
         this.hide();

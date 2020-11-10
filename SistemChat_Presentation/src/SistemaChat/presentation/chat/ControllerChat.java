@@ -8,6 +8,8 @@ package SistemaChat.presentation.chat;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,13 +39,7 @@ public class ControllerChat {
     {
         model.setCurrent(c);
         model.setRecipient(new User());
-        User nuevo = new User();
-        // BORRAR LUEGO DE IMPLEMENTAR LA FUNCION DE AGREGAR CONTACTOS
-        nuevo.setUsername("diana");
-        nuevo.setPassword("5678");
-        nuevo.setEstado("online");
-        c.getUserList().add(nuevo);
-        model.setContactsList(ServiceProxy.getInstance().getContactos(c.getUserList()));
+        model.setContactsList(c.getUserList());
         model.commit();
     }
     
