@@ -15,7 +15,11 @@ import javax.xml.bind.annotation.XmlIDREF;
  * @author adria
  */
 @XmlAccessorType(XmlAccessType.FIELD)
+<<<<<<< HEAD
+public class Message implements Serializable {
+=======
 public class Message implements Serializable{
+>>>>>>> 44c0d9465c1688a9cc7b987d561e4982d32db56c
     @XmlIDREF
     private User sender;
     private String text;

@@ -8,6 +8,7 @@ package SistemaChat.presentation.chat;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,5 +74,28 @@ public class ControllerChat {
     {
         view.setVisible(false);
     }
+    
+    void addContact(String text) throws IOException { //------------  OK!!!!!
+       System.out.println("se ejecuta addContact del ControllerChat");
+        proxy.addContact(text);
+        
+    }
+    public void agregarContacto(User u){ //-------------------  OK !!!!
+        for(User us:model.getContactsList()){
+            if(us.equals(u)){
+                try {  
+                    throw new Exception("El contacto ya existe.");
+                } catch (Exception ex) {
+                    Logger.getLogger(ControllerChat.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        model.getContactsList().add(u); 
+        model.commit(); 
+    }
+
+
+    
+    
 
 }

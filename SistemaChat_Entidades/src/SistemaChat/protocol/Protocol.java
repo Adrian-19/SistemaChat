@@ -16,11 +16,20 @@ public class Protocol {
     public static final int LOGIN=1;
     public static final int LOGOUT=2;    
     public static final int SEND=3;
+<<<<<<< HEAD
+    public static final int SEARCH=4; // busqueda de contactos en base de datos
+    public static final int VALIDCONT=5; //validación de contacto. Envía un contacto de la base de datos
+    
+=======
 
+>>>>>>> 44c0d9465c1688a9cc7b987d561e4982d32db56c
     public static final int DELIVER=1;
+    public static final int ADDCONTACT=2; 
+
     
     public static final int ERROR_NO_ERROR=0;
     public static final int ERROR_LOGIN=1;
     public static final int ERROR_LOGOUT=2;    
     public static final int ERROR_POST=3;
+    
 }

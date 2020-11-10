@@ -9,7 +9,10 @@ import SistemaChat.logic.Message;
 import SistemaChat.presentation.UsuarioTableModel;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -141,6 +144,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         agregarButton.setBackground(new java.awt.Color(255, 255, 250));
         agregarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
         agregarButton.setText("Añadir");
+        agregarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarButtonActionPerformed(evt);
+            }
+        });
 
         mensajeErrorEnvio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         mensajeErrorEnvio.setForeground(new java.awt.Color(255, 0, 0));
@@ -276,6 +284,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private void enviarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarButtonActionPerformed
         Message message = new Message(model.getCurrent(), enviarField.getText());
         controller.send(message);
+        
     }//GEN-LAST:event_enviarButtonActionPerformed
 
     private void enviarFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarFieldKeyPressed
@@ -285,6 +294,22 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
             controller.send(message);
         }
     }//GEN-LAST:event_enviarFieldKeyPressed
+
+    private void agregarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarButtonActionPerformed
+        try {
+            // Buscar el username en la lista de la base de datos  ----------------------------------------------------
+            //si existe lo agrega a la lista de contactos
+            // si no lo encuentra, no existe...
+            controller.addContact(agregarField.getText());
+            
+            
+        } catch (IOException ex) {
+            //Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+ 
+        
+    }//GEN-LAST:event_agregarButtonActionPerformed
 
     /**
      * @param args the command line arguments

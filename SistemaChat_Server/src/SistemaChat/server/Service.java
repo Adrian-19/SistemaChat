@@ -89,4 +89,18 @@ public class Service implements IService {
         }
         return tmpList;
     }
+    
+    public User readContactFromDB(String username) throws Exception{
+        User temp = usuarioDao.read(username); 
+        
+        if(temp==null)
+        {
+            throw new Exception("User does not exist");
+        }
+        if(temp.getUsername().equals(username)){ //si lo encontró...se puede agregar el contacto
+            return temp; 
+        }
+        return null; 
+        
+    }
 }
