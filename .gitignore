@@ -2,3 +2,6 @@
 /SistemaChat_Entidades/build/
 /SistemChat_Presentation/build/
 /SistemaChat_Server/build/
+/SistemaChat_Entidades/dist/
+/SistemChat_Presentation/dist/
+/SistemaChat_Server/dist/

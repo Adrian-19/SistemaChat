@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,7 +40,11 @@ public class Worker {
             //System.out.println("Worker awaiting commands");
             Thread thread = new Thread(new Runnable(){
                 public void run(){
-                    listen();
+                    try {
+                        listen();
+                    } catch (Exception ex) {
+                        
+                    }
                 }
             });
             continuar = true;
@@ -51,7 +57,7 @@ public class Worker {
         continuar=false;
     }
     
-    public void listen(){
+    public void listen() throws ClassNotFoundException, Exception{
         int method;
         while (continuar) {
             try {
@@ -66,17 +72,28 @@ public class Worker {
                     break;                 
                 case Protocol.SEND:
                     System.out.println("esto no se deberia ejecutar ahorita");
-                    Message message=null;
+                    Message message;
                     try {
-                        message = (Message)in.readObject();
+                        message = (Message)in.readObject(); 
                         message.setText(user.getUsername() + ": " + message.getText());
                         Service.getInstance().send(message);
                     } catch (ClassNotFoundException ex) {}
                     break;
+                    
+                case Protocol.SEARCH:
+                    System.out.println("Se ejecuta el caso SEARCH del listen del worker");
+                    String username = (String) in.readObject(); 
+                    User existeC= Service.getInstance().readContactFromDB(username); //le paso el nombre de usuario para verificar
+                    
+                    
+                    out.writeInt(Protocol.VALIDCONT); //para que lo reciba el listener del proxyServer
+                    System.out.println("Envía el protocolo ValidCont al listener del proxy");
+                    out.writeObject(existeC);  //envía serializado un usuario para agregar a contactos
+
                 }
                 out.flush();
             } catch (IOException  ex) {
-                continuar = false;
+                continuar = false; 
             }                        
         }
     }

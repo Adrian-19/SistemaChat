@@ -19,4 +19,11 @@ public interface IService {
     public void send(Message msg);
     
     public List<User> getContactos(List<User> list);
+
+    public User readContactFromDB(String username) throws Exception;
+
+
+    
+
+    
 }

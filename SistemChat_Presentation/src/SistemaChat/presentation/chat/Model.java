@@ -69,4 +69,6 @@ public class Model extends java.util.Observable{
         this.setChanged();
         this.notifyObservers();
     }   
+
+    
 }
