@@ -5,12 +5,11 @@
  */
 package SistemaChat.presentation.chat;
 
+import SistemaChat.logic.Chat;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -50,14 +49,58 @@ public class ControllerChat {
     }
     
     public void deliver(Message message){
-        model.getMessageList().add(message);
-        model.commit();    
+        for(Chat c : model.getCurrent().getChatList())
+        {
+            String chatReceiver = c.getReceiver().getUsername();
+            String messageRecipient = message.getRecipient().getUsername();
+            String messageSender = message.getSender().getUsername();
+            if(chatReceiver.equals(messageRecipient)){
+                c.getMessageList().add(message);
+                model.commit();
+                return;
+            }else if(chatReceiver.equals(messageSender))
+            {
+                c.getMessageList().add(message);
+                model.commit();
+                return;
+            }
+        }
+        
     }    
     
     public void logout()
     { 
         this.hide();
-        parent.logout();
+        parent.logout(model.getCurrent());
+    }
+    
+    public void seleccionar(int row)
+    {
+        model.setRecipient(model.getContactsList().get(row));
+        // Busca el chat DEL CURRENT USUARIO que tenga el mismo recipient que 
+        // el recipiente del model
+        System.out.println("s");
+        for(Chat c : model.getCurrent().getChatList())
+        {
+            if(c.getReceiver() == model.getRecipient())
+            {
+                model.setChat(c);
+                model.commit();  
+                return;
+            }
+        }
+        // Si no encuentra el chat, significa que no existe uno
+        model.getCurrent().getChatList().add(new Chat(model.getRecipient(), new ArrayList<>()));
+        for(Chat c : model.getCurrent().getChatList())
+        {
+            if(c.getReceiver() == model.getRecipient())
+            {
+                System.out.println("se creo un nuevo chat");
+                model.setChat(c);
+                model.commit();  
+                return;
+            }
+        }
     }
     
     public void setParent(SistemaChat.presentation.login.Controller p)
@@ -75,22 +118,25 @@ public class ControllerChat {
         view.setVisible(false);
     }
     
-    void addContact(String text) throws IOException { //------------  OK!!!!!
-       System.out.println("se ejecuta addContact del ControllerChat");
+    void addContact(String text) throws Exception { //------------  OK!!!!!
+       for(User u : model.getContactsList())
+       {
+           if (u.getUsername() == null ? text == null : u.getUsername().equals(text))
+           {
+               throw new Exception("Contacto ya existe");
+           }
+       }
         proxy.addContact(text);
         
     }
     public void agregarContacto(User u){ //-------------------  OK !!!!
-        for(User us:model.getContactsList()){
-            if(us.equals(u)){
-                try {  
-                    throw new Exception("El contacto ya existe.");
-                } catch (Exception ex) {
-                    Logger.getLogger(ControllerChat.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        if(u==null)
+        {
+            view.mensajeUsuarioNoEncontrado("Usuario no existe");
+            return;
         }
-        model.getContactsList().add(u); 
+        //model.getContactsList().add(u);
+        model.getCurrent().getUserList().add(u);
         model.commit(); 
     }
 

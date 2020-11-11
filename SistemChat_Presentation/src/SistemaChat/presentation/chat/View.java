@@ -10,6 +10,7 @@ import SistemaChat.presentation.UsuarioTableModel;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,6 +117,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
                 "Username", "Status"
             }
         ));
+        listaContactos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaContactosMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(listaContactos);
 
         buscarButton.setBackground(new java.awt.Color(255, 255, 250));
@@ -156,7 +162,6 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
 
         mensajeErrorUsuario.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         mensajeErrorUsuario.setForeground(new java.awt.Color(255, 0, 0));
-        mensajeErrorUsuario.setText("detalle de verificacion");
 
         usernameLabel1.setFont(new java.awt.Font("Helvetica-Light", 1, 14)); // NOI18N
         usernameLabel1.setText("Búsqueda de contactos");
@@ -168,77 +173,69 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
             .addGroup(colorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(colorPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorPanelLayout.createSequentialGroup()
+                        .addComponent(agregarField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(agregarButton))
                     .addGroup(colorPanelLayout.createSequentialGroup()
                         .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorPanelLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel2)
+                            .addComponent(mensajeErrorUsuario)
+                            .addComponent(usernameLabel1)
+                            .addGroup(colorPanelLayout.createSequentialGroup()
                                 .addComponent(buscarField, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(buscarButton))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorPanelLayout.createSequentialGroup()
-                                .addComponent(agregarField)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(agregarButton))
-                            .addGroup(colorPanelLayout.createSequentialGroup()
-                                .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(mensajeErrorUsuario)
-                                    .addComponent(usernameLabel1))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(mensajeErrorEnvio)
-                            .addGroup(colorPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(usernameLabel))
-                            .addGroup(colorPanelLayout.createSequentialGroup()
-                                .addComponent(enviarField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(enviarButton))
-                            .addComponent(jScrollPane2))
-                        .addContainerGap(21, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(mensajeErrorEnvio)
+                    .addGroup(colorPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(usernameLabel))
+                    .addGroup(colorPanelLayout.createSequentialGroup()
+                        .addComponent(enviarField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(enviarButton))
+                    .addComponent(jScrollPane2))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         colorPanelLayout.setVerticalGroup(
             colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(colorPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(usernameLabel)
+                    .addComponent(usernameLabel1))
+                .addGap(4, 4, 4)
+                .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(colorPanelLayout.createSequentialGroup()
+                        .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(buscarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buscarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colorPanelLayout.createSequentialGroup()
                         .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(usernameLabel))
-                        .addGap(4, 4, 4)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorPanelLayout.createSequentialGroup()
-                        .addGap(0, 6, Short.MAX_VALUE)
-                        .addComponent(usernameLabel1)
+                            .addComponent(enviarField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(enviarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buscarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(buscarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(mensajeErrorEnvio))
                     .addGroup(colorPanelLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(agregarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(agregarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mensajeErrorUsuario))
-                    .addGroup(colorPanelLayout.createSequentialGroup()
-                        .addGroup(colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(enviarField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(enviarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mensajeErrorEnvio))))
+                        .addGap(18, 18, 18)
+                        .addComponent(mensajeErrorUsuario)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -282,7 +279,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     }//GEN-LAST:event_formWindowClosing
 
     private void enviarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarButtonActionPerformed
-        Message message = new Message(model.getCurrent(), enviarField.getText());
+        Message message = new Message(model.getCurrent(), enviarField.getText(), model.getRecipient());
         controller.send(message);
         
     }//GEN-LAST:event_enviarButtonActionPerformed
@@ -290,7 +287,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private void enviarFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarFieldKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            Message message = new Message(model.getCurrent(), enviarField.getText());
+            Message message = new Message(model.getCurrent(), enviarField.getText(),model.getRecipient());
             controller.send(message);
         }
     }//GEN-LAST:event_enviarFieldKeyPressed
@@ -301,15 +298,23 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
             //si existe lo agrega a la lista de contactos
             // si no lo encuentra, no existe...
             controller.addContact(agregarField.getText());
+            mensajeErrorUsuario.setText("");
             
-            
-        } catch (IOException ex) {
-            //Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            mensajeErrorUsuario.setText("Contacto ya existe");
         }
         
  
         
     }//GEN-LAST:event_agregarButtonActionPerformed
+
+    private void listaContactosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaContactosMouseClicked
+        if(evt.getClickCount()==2){
+            
+            controller.seleccionar(listaContactos.getSelectedRow());
+            usernameLabel.setText(model.getRecipient().getUsername());
+        }
+    }//GEN-LAST:event_listaContactosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -385,12 +390,19 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     public void setController(ControllerChat controller) {
         this.controller = controller;
     }
-
+    
+    public void mensajeUsuarioNoEncontrado(String msg)
+    {
+        mensajeErrorUsuario.setText(msg);
+    }
+    
     @Override
     public void update(Observable updatedModel, Object parametros) {
         listaContactos.setModel(new UsuarioTableModel(model.getContactsList()));
+        mensajeErrorUsuario.setText("");
         String msg = "";
-        for(Message m: model.getMessageList())
+        List<Message> messages = model.getChat().getMessageList();
+        for(Message m: messages)
         {
             msg+=(m.getText()+"\n");
         }

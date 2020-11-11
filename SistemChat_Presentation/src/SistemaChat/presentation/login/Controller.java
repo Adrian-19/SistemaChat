@@ -111,15 +111,10 @@ public class Controller {
         chat_Controller.show();
     }
     
-    public void logout()
+    public void logout(User u)
     {
-        try {
-            XmlPersister.getInstance().store(model.getCurrentUser());
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
         try{
-            proxy.logout(model.getCurrentUser());
+            proxy.logout(u);
         }
         catch(Exception ex){}
         this.show();

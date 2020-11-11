@@ -42,7 +42,6 @@ public class Server {
         while (continuar) {
             try {
                 Socket socket = server.accept();
-                System.out.println("new socket");
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream() );
                 try {
@@ -57,18 +56,18 @@ public class Server {
                             recuperado = XmlPersister.getInstance().load();
                         }
                         catch(Exception e){
+                            System.out.println(e.getMessage());
                         }
                         
                         User nuevo = new User();
                         
                         // PRUEBA 
-                        nuevo.setUsername("diana");
-                        nuevo.setPassword("5678");
-                        nuevo.setEstado("online");
-                        recuperado.getUserList().add(nuevo);
+//                        nuevo.setUsername("diana");
+//                        nuevo.setPassword("5678");
+//                        nuevo.setEstado("online");
+//                        recuperado.getUserList().add(nuevo);
                         
                         List<User> lista = Service.getInstance().getContactos(recuperado.getUserList());
-                        System.out.println(lista.get(0).getUsername());
                         user.setUserList(lista);
                         out.writeInt(Protocol.ERROR_NO_ERROR);
                         out.writeObject(user);
@@ -77,7 +76,6 @@ public class Server {
                         // INICIALIZA LOS WORKER
                         Worker worker = new Worker(socket,in,out,user); 
                         workers.add(worker);
-                        System.out.println("worker agregado");
                         worker.start();                            
                     } catch (Exception ex) {
                        out.writeInt(Protocol.ERROR_LOGIN);
@@ -93,8 +91,19 @@ public class Server {
     
     // METODO PARA TOMAR EN CONSIDERACION EN EL ENVIO DE MENSAJES
     public void deliver(Message message){
+        System.out.println("estamos en deliver de server");
         for(Worker wk:workers){
-          wk.deliver(message);
+          if(wk.getUser().getUsername().equals(message.getRecipient().getUsername()))
+          {
+             System.out.println("se enviara a " + wk.getUser().getUsername());
+             wk.deliver(message);
+            
+          } 
+          else{
+              System.out.println("se enviara a " + wk.getUser().getUsername());
+              wk.deliver(message);
+          }
+         
         }        
     } 
     

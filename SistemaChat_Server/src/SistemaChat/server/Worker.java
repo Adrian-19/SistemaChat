@@ -5,6 +5,7 @@
  */
 package SistemaChat.server;
 
+import SistemaChat.data.XmlPersister;
 import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.protocol.Protocol;
@@ -62,39 +63,43 @@ public class Worker {
         while (continuar) {
             try {
                 method = in.readInt();
-                System.out.println("method: "+method);
                 switch(method){
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
+                    User actual = (User)in.readObject();
+                    XmlPersister.getInstance().setPath(actual.getUsername()+".xml");
+                    XmlPersister.getInstance().store(actual);
                     try {
                         Service.getInstance().logout(user);
                     } catch (Exception ex) {}
                     stop();
                     break;                 
                 case Protocol.SEND:
-<<<<<<< HEAD
                     System.out.println("esto no se deberia ejecutar ahorita");
                     Message message;
-=======
-                    Message message=null;
->>>>>>> 44c0d9465c1688a9cc7b987d561e4982d32db56c
                     try {
-                        message = (Message)in.readObject(); 
+                        System.out.println("aqui si?");
+                        message = (Message)in.readObject();
+                        System.out.println("esto");
                         message.setText(user.getUsername() + ": " + message.getText());
                         Service.getInstance().send(message);
-                    } catch (ClassNotFoundException ex) {}
+                    } catch (ClassNotFoundException ex) {
+                        System.out.println("excepcion");
+                    }
                     break;
                     
                 case Protocol.SEARCH:
-                    System.out.println("Se ejecuta el caso SEARCH del listen del worker");
-                    String username = (String) in.readObject(); 
-                    User existeC= Service.getInstance().readContactFromDB(username); //le paso el nombre de usuario para verificar
-                    
-                    
-                    out.writeInt(Protocol.VALIDCONT); //para que lo reciba el listener del proxyServer
-                    System.out.println("Envía el protocolo ValidCont al listener del proxy");
-                    out.writeObject(existeC);  //envía serializado un usuario para agregar a contactos
-
+                    String username = (String) in.readObject();
+                    User existeC = new User();
+                    try{
+                        existeC= Service.getInstance().readContactFromDB(username); //le paso el nombre de usuario para verificar
+                        out.writeInt(Protocol.VALIDCONT); //para que lo reciba el listener del proxyServer
+                        System.out.println("Envía el protocolo ValidCont al listener del proxy");
+                        out.writeObject(existeC);  //envía serializado un usuario para agregar a contactos
+                    }catch(Exception ex){
+                        out.writeInt(Protocol.ERROR_SEARCH);
+                    }
+                    break;
                 }
                 out.flush();
             } catch (IOException  ex) {
@@ -111,4 +116,14 @@ public class Worker {
         } 
         catch (IOException ex) {}
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    
 }

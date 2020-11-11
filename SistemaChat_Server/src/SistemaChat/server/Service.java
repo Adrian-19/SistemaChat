@@ -42,6 +42,7 @@ public class Service implements IService {
     }
     
     public void send(Message m){
+        System.out.println("en service, se ejecutara server.deliver("+m.getText()+")");
         server.deliver(m);
     }
     
@@ -90,6 +91,7 @@ public class Service implements IService {
         return tmpList;
     }
     
+    @Override
     public User readContactFromDB(String username) throws Exception{
         User temp = usuarioDao.read(username); 
         

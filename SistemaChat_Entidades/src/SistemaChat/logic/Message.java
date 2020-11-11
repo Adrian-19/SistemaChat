@@ -15,25 +15,24 @@ import javax.xml.bind.annotation.XmlIDREF;
  * @author adria
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-<<<<<<< HEAD
 public class Message implements Serializable {
-=======
-public class Message implements Serializable{
->>>>>>> 44c0d9465c1688a9cc7b987d561e4982d32db56c
     @XmlIDREF
     private User sender;
     private String text;
-
-    public Message(User sender, String text) {
+    private User recipient;
+    
+    public Message(User sender, String text, User recipient) {
         this.sender = sender;
         this.text = text;
+        this.recipient = recipient;
     }
     
     public Message() {
         this.sender = new User();
         this.text = "";
+        this.recipient = new User();
     }
-
+    
     public User getSender() {
         return sender;
     }
@@ -48,6 +47,14 @@ public class Message implements Serializable{
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public User getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
     }
     
     

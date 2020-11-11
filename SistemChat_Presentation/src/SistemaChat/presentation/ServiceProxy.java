@@ -122,8 +122,10 @@ public class ServiceProxy implements IService{
                 switch(method){
                 case Protocol.DELIVER:
                     try {
+                        System.out.println("se entra al protocolo de deliver");
                         Message message=(Message)in.readObject();
                         deliver(message);
+                        System.out.println("se termina el protocolo de deliver");
                     } 
                     catch (ClassNotFoundException ex) {}
                     break;
@@ -132,9 +134,11 @@ public class ServiceProxy implements IService{
                     User temp = (User) in.readObject(); //Falta agregar este usuario a la lista de contastos del model!
                     System.out.println("Se deserializa el contacto que viene de la BD");
                     agregarCont(temp); //si esxiste, este método lo agrega al ControllerChat/Model //usa runnable
-                    
+                    break;
+                case Protocol.ERROR_SEARCH:
+                    agregarCont(null);
+                    break;
                 }
-                
                 out.flush();
             } catch (IOException  ex) {
                 continuar = false;
@@ -150,7 +154,11 @@ public class ServiceProxy implements IService{
             out.writeInt(Protocol.SEND);
             out.writeObject(msg);
             out.flush();
-        }catch(IOException ex){}
+            System.out.println("object outed");
+        }catch(IOException ex){
+            System.out.println("message: "+ex.getMessage());
+            System.out.println("cause: "+ex.getCause());
+        }
     }
     
     private void deliver(Message msg) {
@@ -179,7 +187,7 @@ public class ServiceProxy implements IService{
     public void addContact(String username)throws IOException{ //------------------------------------- OK!!
         System.out.println("Se ejecuta addContact del ServiceProxy");
         out.writeInt(Protocol.SEARCH);
-        out.writeObject((Object) username);
+        out.writeObject((String) username);
         out.flush();
     } 
     
@@ -188,21 +196,21 @@ public class ServiceProxy implements IService{
         SwingUtilities.invokeLater(new Runnable(){
             
             public void run(){ 
-                //HACER VALIDACIONES...
-                //NO RECUPERA...
-                if(contacto == null){
-                    
-                    try {
-                        throw new Exception("El contacto no existe");
-                    } catch (Exception ex) {
-                        Logger.getLogger(ServiceProxy.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                } 
-                else{
+//                //HACER VALIDACIONES...
+//                //NO RECUPERA...
+//                if(contacto == null){
+//                    
+//                    try {
+//                        throw new Exception("El contacto no existe");
+//                    } catch (Exception ex) {
+//                        Logger.getLogger(ServiceProxy.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    
+//                } 
+//                else{
                     controllerChat.agregarContacto(contacto);
                     System.out.println("Se agrego contacto al controllerChat");
-                }
+                //}
                
             }
         }

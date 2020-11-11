@@ -33,6 +33,10 @@ public class XmlPersister {
     {
         path = p;
     }
+    public String getPath()
+    {
+        return path;
+    }
     public User load() throws Exception // por que mandara exception?? 
     {
         JAXBContext jaxbContext = JAXBContext.newInstance(User.class);
