@@ -138,6 +138,12 @@ public class ServiceProxy implements IService{
                 case Protocol.ERROR_SEARCH:
                     agregarCont(null);
                     break;
+                case Protocol.STATUS_CHANGE:
+                    try{
+                        User u = (User)in.readObject();
+                        statusChange(u);
+                    }catch(Exception e){}
+                    break;
                 }
                 out.flush();
             } catch (IOException  ex) {
@@ -191,6 +197,16 @@ public class ServiceProxy implements IService{
         out.flush();
     } 
     
+    public void statusChange(User u)
+    {
+        SwingUtilities.invokeLater(new Runnable(){
+            
+            public void run(){
+                controllerChat.statusChange(u);
+            }
+        }
+        );
+    }
     
     public void agregarCont(User contacto){ //------------------------------------------------------OK!!!!
         SwingUtilities.invokeLater(new Runnable(){

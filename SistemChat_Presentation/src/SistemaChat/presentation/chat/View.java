@@ -6,14 +6,12 @@
 package SistemaChat.presentation.chat;
 
 import SistemaChat.logic.Message;
+import SistemaChat.logic.User;
 import SistemaChat.presentation.UsuarioTableModel;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -127,6 +125,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         buscarButton.setBackground(new java.awt.Color(255, 255, 250));
         buscarButton.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
         buscarButton.setText("Buscar");
+        buscarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarButtonActionPerformed(evt);
+            }
+        });
 
         buscarField.setForeground(new java.awt.Color(204, 204, 204));
         buscarField.setText("Username...");
@@ -316,6 +319,12 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         }
     }//GEN-LAST:event_listaContactosMouseClicked
 
+    private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
+        User filtro = new User();
+        filtro.setUsername(buscarField.getText());
+        controller.buscar(filtro);
+    }//GEN-LAST:event_buscarButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,10 +418,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         chatLog.setText(msg);
         enviarField.setText("");
         enviarField.requestFocus();
-        
-        // como estaremos recibiendo una lista actualizada cada cierto tiempo,
-        // podria ser que en esta lista se busque el usuario recipient para
-        // igualmente a este actualizarlo y asi verificar su estado.
+        this.setTitle("Usuario: "+model.getCurrent().getUsername());
     }
     
     

@@ -70,6 +70,10 @@ public class Service implements IService {
     public void logout(User u) throws Exception
     {
         server.remove(u);
+        User actualizar = new User();
+        actualizar.setEstado("Offline");
+        actualizar.setUsername(u.getUsername());
+        usuarioDao.update(u);
     }
 
     @Override

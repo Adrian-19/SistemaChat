@@ -10,6 +10,7 @@ import SistemaChat.logic.Message;
 import SistemaChat.logic.User;
 import SistemaChat.presentation.ServiceProxy;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -140,8 +141,38 @@ public class ControllerChat {
         model.commit(); 
     }
 
-
+    public void buscar(User u)
+    {
+        List<User> result = new ArrayList<>();
+        for(User d : model.getCurrent().getUserList())
+        {
+            if(d.getUsername().contains(u.getUsername()))
+            {
+                result.add(d);
+            }
+        }
+        model.setContactsList(result);
+        model.commit();
+    }
     
-    
+    public void statusChange(User u)
+    {
+        for(User d : model.getContactsList())
+        {
+            if(d.getUsername().equals(u.getUsername()))
+            {
+                if("Online".equals(d.getEstado()))
+                {
+                    d.setEstado("Offline");
+                    break;
+                }
+                else{
+                    d.setEstado("Online");
+                    break;
+                }
+            }
+        }
+        model.commit();
+    }
 
 }

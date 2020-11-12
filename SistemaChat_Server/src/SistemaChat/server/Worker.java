@@ -87,7 +87,6 @@ public class Worker {
                         System.out.println("excepcion");
                     }
                     break;
-                    
                 case Protocol.SEARCH:
                     String username = (String) in.readObject();
                     User existeC = new User();
@@ -116,7 +115,16 @@ public class Worker {
         } 
         catch (IOException ex) {}
     }
-
+    
+    public void statusChange(User u)
+    {
+        try{
+            out.writeInt(Protocol.STATUS_CHANGE);
+            out.writeObject(u);
+            out.flush();
+        }catch(IOException ex){}
+    }
+    
     public User getUser() {
         return user;
     }

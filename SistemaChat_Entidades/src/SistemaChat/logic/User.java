@@ -68,8 +68,6 @@ public class User implements Serializable{
         this.estado = estado;
     }
     
-    
-    
     public List<User> getUserList() {
         return userList;
     }
